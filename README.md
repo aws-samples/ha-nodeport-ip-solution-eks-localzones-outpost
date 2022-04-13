@@ -1,16 +1,16 @@
 
 ## High Available Secondary IP NodePort Solution
 
-##Container Based solution alongwith EC2 userdata
+## Container Based solution alongwith EC2 userdata
 
 
-#### Pre-requisite
+### Pre-requisite
 
 1. EKS cluster
 2. EKS nodegroup (with desired IAM role & [IAM policy](samples/iam-policy.json).
 6. Bastion node with docker and git
 
-#### How to Build
+### How to Build
 
 Clone this repo:
 
@@ -26,7 +26,7 @@ aws ecr create-repository --repository-name aws-ip-manager --region us-east-2
 docker push xxxxxxxxx.dkr.ecr.us-east-2.amazonaws.com/assign-secondary-ip:0.1
 ```
 
-####  Setup the aws-node deployment to not exceed the max secondary IP on the ENI
+###  Setup the aws-node deployment to not exceed the max secondary IP on the ENI
 
 Please set the MINIMUM_IP_TARGET and WARM_IP_TARGET variable according to the instance type, so that total of both is at least 1-2 less than the max IP addresses supported per ENI on that instance type. This is needed so that our HA NodePort IP can be 
 
@@ -41,7 +41,7 @@ WARM_ENI_TARGET: 1
 WARM_IP_TARGET: 2
 MINIMUM_IP_TARGET: 10
 
-####  Create the NodeGroup with the static IP in userdata
+###  Create the NodeGroup with the static IP in userdata
 Create the nodegroup using CloudFormation. For the EC2 userdata, Replace xxxxxxxx with eks cluster name , 10.0.0.201/24 is the HA nodeport IP for the cluster, change it as per your subnets. yyyyyyyy is the cloudformation stack name. Nodeselector cnf=test is just an example, feel free to remove or chnage from below and the Deployment spec. 
 
 ```
@@ -59,7 +59,7 @@ systemctl start rc-local
 --region us-east-2
 ```
 
-#### Configure & Deploy Floating NodePort  IP  Manager  Pod 
+### Configure & Deploy Floating NodePort IP Helper Deployment
 
 Floating NodePort IP management container, is a deployment with single replica. This deployment will take the pre-selected IP as a parameter to configure this secondary Ip on the workers primary interface. 
 
@@ -105,7 +105,7 @@ nodeport-helper-deploy-5b98c7b65c-mxczx 1/1 Running 0 1m5s
 $
 ```
 
-##### Verify access is working with this HA Nodeport IP
+### Verify access is working with this HA Nodeport IP
 ```
 $ curl 10.0.0.201:30180
 <!DOCTYPE html>
