@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeport-helper-deploy
+  labels:
+    app: nodeport-helper
+spec:
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: nodeport-helper
+  template:
+    metadata:
+      labels:
+        app: nodeport-helper
+    spec:
+      nodeSelector:
+        cnf: test      
+      containers:
+      - name: nodeport-helper
+        image: 903666168365.dkr.ecr.us-east-2.amazonaws.com/assign-secondary-ip:0.1
+        imagePullPolicy: Always
+        env:
+        - name: NODEPORT_IP
+          value: "10.0.0.201/24"        
+        args: [/bin/sh, -c, '/app/script.sh']
+      tolerations:
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30                

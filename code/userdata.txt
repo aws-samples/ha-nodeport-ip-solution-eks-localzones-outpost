@@ -1,0 +1,18 @@
+#!/bin/bash
+NODEPORT_IP="10.0.0.201/24"
+ip address add ${NODEPORT_IP} dev eth0 >> /etc/rc.d/rc.local
+systemctl enable rc-local
+chmod +x /etc/rc.d/rc.local
+
+
+#!/bin/bash
+set -o xtrace
+NODEPORT_IP="10.0.0.201/24"
+echo "ip address add ${NODEPORT_IP} dev eth0" >> /etc/rc.d/rc.local
+chmod +x /etc/rc.d/rc.local  
+systemctl enable rc-local          
+/etc/eks/bootstrap.sh raghvendra-new  --use-max-pods false --kubelet-extra-args '--node-labels=cnf=test' 
+/opt/aws/bin/cfn-signal --exit-code $? \
+         --stack  chabba-ng \
+         --resource NodeGroup  \
+         --region us-east-2
