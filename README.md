@@ -3,7 +3,12 @@
 
 ## Container Based solution alongwith EC2 userdata
 
+### Architecture
+![](nodeport.jpg) 
 
+### Automated Failover
+![](nodeport-failover.jpg) 
+## Implementation 
 ### Pre-requisite
 
 1. EKS cluster
