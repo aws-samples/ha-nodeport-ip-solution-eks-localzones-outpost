@@ -1,6 +1,10 @@
 
 ## High Available Secondary IP NodePort Solution
 
+In Local Zones, Outposts , NLB aren’t offered yet, which is a problem for workloads, depending on network based ingress controller. In some uncommon use-cases, some applications, in region as well might use Node Port as ingress controller. As EKS doesn't give access to EKS control plane, Worker Node IPs are used as Ingress IP.
+As Nodes can fail, get manually terminated, scaled down or can get replaced by the AutoScalingGroup, the worker IPs are not fixed, hence the solution is not Highly Available. This proposal provides solution to maintain a Highly Available Node port IP per EKS cluster.
+
+
 ## Container Based solution alongwith EC2 userdata
 
 ### Architecture
